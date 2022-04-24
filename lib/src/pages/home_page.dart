@@ -23,9 +23,14 @@ class HomePage extends StatelessWidget {
     return FutureBuilder(
       future: produtosProvider.carregarProdutos(),
       builder:
+          // ignore: missing_return
           (BuildContext context, AsyncSnapshot<List<ProdutoModel>> snapshot) {
         if (snapshot.hasData) {
-          return Container();
+          final produtos = snapshot.data;
+          return ListView.builder(
+            itemBuilder: (context, i) => _criarItem(context, produtos[i]),
+            itemCount: produtos.length,
+          );
         } else {
           Center(
             child: CircularProgressIndicator(),
@@ -34,12 +39,30 @@ class HomePage extends StatelessWidget {
       },
     );
   }
-}
 
-_criarBotao(BuildContext context) {
-  return FloatingActionButton(
-    onPressed: () => Navigator.pushNamed(context, 'producto'),
-    child: Icon(Icons.add),
-    backgroundColor: Colors.deepPurple,
-  );
+  Widget _criarItem(BuildContext context, ProdutoModel produtoModel) {
+    return Dismissible(
+      key: UniqueKey(),
+      background: Container(
+        color: Colors.red,
+      ),
+      onDismissed: (direcao) {
+        produtosProvider.apagarProduto(produtoModel.id);
+      },
+      child: ListTile(
+        title: Text('${produtoModel.titulo} - ${produtoModel.valor}'),
+        subtitle: Text(produtoModel.id),
+        onTap: () =>
+            Navigator.pushNamed(context, 'producto', arguments: produtoModel),
+      ),
+    );
+  }
+
+  _criarBotao(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () => Navigator.pushNamed(context, 'producto'),
+      child: Icon(Icons.add),
+      backgroundColor: Colors.deepPurple,
+    );
+  }
 }
