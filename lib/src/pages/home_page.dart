@@ -32,11 +32,7 @@ class HomePage extends StatelessWidget {
             itemCount: produtos.length,
           );
         } else {
-          Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

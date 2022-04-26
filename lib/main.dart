@@ -5,11 +5,21 @@ import 'package:bloc_validation/src/pages/producto_page.dart';
 import 'package:bloc_validation/src/pages/registro_page.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+import 'src/preferencias_usuario/preferencias_usuario.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = new PreferenciasUsuario();
+  await prefs.initPrefs();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //Verificar se existe
+    final prefs = new PreferenciasUsuario();
+    print(prefs.token);
     return Provider(
       child: MaterialApp(
         title: 'Material App',

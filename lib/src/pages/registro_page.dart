@@ -1,5 +1,6 @@
 import 'package:bloc_validation/bloc/provider.dart';
 import 'package:bloc_validation/src/providers/usuario_provider.dart';
+import 'package:bloc_validation/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class RegistroPage extends StatelessWidget {
@@ -130,9 +131,14 @@ class RegistroPage extends StatelessWidget {
     );
   }
 
-  _register(LoginBloc bloc, BuildContext context) {
+  _register(LoginBloc bloc, BuildContext context) async {
     usuarioProvider.novoUsuario(bloc.email, bloc.passowrd);
-    // Navigator.pushReplacementNamed(context, 'home');
+    Map info = await usuarioProvider.login(bloc.email, bloc.passowrd);
+    if (info['ok']) {
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      mostrarAlerta(context, 'Credencial Invalido');
+    }
   }
 
   Widget _criarFundo(BuildContext context) {
