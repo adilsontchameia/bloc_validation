@@ -32,8 +32,10 @@ class HomePage extends StatelessWidget {
             itemCount: produtos.length,
           );
         } else {
-          Center(
-            child: CircularProgressIndicator(),
+          Container(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
       },
@@ -49,11 +51,26 @@ class HomePage extends StatelessWidget {
       onDismissed: (direcao) {
         produtosProvider.apagarProduto(produtoModel.id);
       },
-      child: ListTile(
-        title: Text('${produtoModel.titulo} - ${produtoModel.valor}'),
-        subtitle: Text(produtoModel.id),
-        onTap: () =>
-            Navigator.pushNamed(context, 'producto', arguments: produtoModel),
+      child: Card(
+        child: Column(
+          children: [
+            (produtoModel.fotoUrl == null)
+                ? Image(image: AssetImage('assets/no-image.png'))
+                : FadeInImage(
+                    placeholder: AssetImage('assets/jar-loading.gif'),
+                    image: NetworkImage(produtoModel.fotoUrl),
+                    height: 300,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+            ListTile(
+              title: Text('${produtoModel.titulo} - ${produtoModel.valor}'),
+              subtitle: Text(produtoModel.id),
+              onTap: () => Navigator.pushNamed(context, 'producto',
+                  arguments: produtoModel),
+            ),
+          ],
+        ),
       ),
     );
   }

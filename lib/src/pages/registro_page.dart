@@ -1,9 +1,10 @@
 import 'package:bloc_validation/bloc/provider.dart';
+import 'package:bloc_validation/src/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key key}) : super(key: key);
-
+class RegistroPage extends StatelessWidget {
+  RegistroPage({Key key}) : super(key: key);
+  final usuarioProvider = new UsuarioProvider();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +41,7 @@ class LoginPage extends StatelessWidget {
             ], color: Colors.white, borderRadius: BorderRadius.circular(5.0)),
             child: Column(
               children: [
-                Text('Entrar', style: TextStyle(fontSize: 20.0)),
+                Text('Criar Conta', style: TextStyle(fontSize: 20.0)),
                 SizedBox(height: 60.0),
                 _criarEmail(bloc),
                 SizedBox(height: 30.0),
@@ -51,9 +52,8 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           FlatButton(
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, 'registro'),
-              child: Text('Criar Nova Conta')),
+              onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+              child: Text('Ja tem uma conta ?')),
           SizedBox(height: 100.0),
         ],
       ),
@@ -124,18 +124,15 @@ class LoginPage extends StatelessWidget {
           elevation: 0.0,
           color: Colors.deepPurple,
           textColor: Colors.white,
-          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+          onPressed: snapshot.hasData ? () => _register(bloc, context) : null,
         );
       },
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) {
-    print('===================');
-    print('Email: ${bloc.email}');
-    print('Password: ${bloc.passowrd}');
-    print('===================');
-    Navigator.pushReplacementNamed(context, 'home');
+  _register(LoginBloc bloc, BuildContext context) {
+    usuarioProvider.novoUsuario(bloc.email, bloc.passowrd);
+    // Navigator.pushReplacementNamed(context, 'home');
   }
 
   Widget _criarFundo(BuildContext context) {
